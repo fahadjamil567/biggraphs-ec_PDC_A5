@@ -175,14 +175,27 @@ void bfs_bottom_up(Graph graph, solution *sol)
 
 void hybrid_step(Graph g, vertex_set *frontier, vertex_set *new_frontier, int *distances, int level)
 {
-    if (frontier->count < g->num_nodes / 2)
+    // Calculate frontier density (ratio of frontier size to total nodes)
+    double frontier_density = (double)frontier->count / g->num_nodes;
+
+    // Calculate average out-degree of frontier nodes
+    double avg_out_degree = 0.0;
+    for (int i = 0; i < frontier->count; i++)
     {
-        // uses top down if frontier small
+        int node = frontier->vertices[i];
+        int start_edge = g->outgoing_starts[node];
+        int end_edge = (node == g->num_nodes - 1) ? g->num_edges : g->outgoing_starts[node + 1];
+        avg_out_degree += (end_edge - start_edge);
+    }
+    avg_out_degree /= frontier->count;
+
+    if (frontier_density < 0.1 || (frontier_density < 0.3 && avg_out_degree > 10))
+    {
         top_down_step(g, frontier, new_frontier, distances);
     }
     else
     {
-        // uses bottom up in case frontier large
+        // Use bottom-up when frontier is dense or has low out-degree
         bottom_up_step(g, frontier, new_frontier, distances, level);
     }
 }
@@ -197,11 +210,13 @@ void bfs_hybrid(Graph graph, solution *sol)
     vertex_set *frontier = &list1;
     vertex_set *new_frontier = &list2;
 
+    // Initialize all distances
     for (int i = 0; i < graph->num_nodes; i++)
     {
         sol->distances[i] = NOT_VISITED_MARKER;
     }
 
+    // Start from root
     frontier->vertices[frontier->count++] = ROOT_NODE_ID;
     sol->distances[ROOT_NODE_ID] = 0;
     int level = 0;
@@ -221,7 +236,7 @@ void bfs_hybrid(Graph graph, solution *sol)
         printf("frontier=%-10d %.4f sec\n", frontier->count, end_time - start_time);
 #endif
 
-        // swapping frontiers
+        // Swap frontiers
         vertex_set *tmp = frontier;
         frontier = new_frontier;
         new_frontier = tmp;
