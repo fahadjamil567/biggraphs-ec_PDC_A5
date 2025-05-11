@@ -114,20 +114,19 @@ void bottom_up_step(
 
         for (int edge = start_edge; edge < end_edge; edge++)
         {
-            int incoming = g->incoming_edges[edge];
+            int parent = g->incoming_edges[edge];
 
-            if (distances[incoming] == current_level)
+            if (distances[parent] == current_level)
             {
                 distances[node] = current_level + 1;
                 int index;
-
-#pragma omp critical
+#pragma omp atomic capture
                 {
                     index = new_frontier->count++;
-                    new_frontier->vertices[index] = node;
                 }
+                new_frontier->vertices[index] = node;
 
-                break; // stops when successful in finding frontier parent
+                break; // Found a parent in frontier, no need to check other parents
             }
         }
     }
@@ -198,13 +197,11 @@ void bfs_hybrid(Graph graph, solution *sol)
     vertex_set *frontier = &list1;
     vertex_set *new_frontier = &list2;
 
-    // Initialize all distances
     for (int i = 0; i < graph->num_nodes; i++)
     {
         sol->distances[i] = NOT_VISITED_MARKER;
     }
 
-    // Start from root
     frontier->vertices[frontier->count++] = ROOT_NODE_ID;
     sol->distances[ROOT_NODE_ID] = 0;
     int level = 0;
