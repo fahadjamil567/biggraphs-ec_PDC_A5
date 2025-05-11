@@ -2,19 +2,19 @@
 **Partners**: Muhammad Taahaa 22L-6717, Muhammad Fahad Jamil 22i-1025
 
 ## Top-Down BFS (Part 1)
-![Top Down Parallel Part 1](../output/Top_down_parallel_part1.png)
+![Top Down Parallel Part 1](/output/Top_down_parallel_part1.png)
 
 ## Pre Part 1
-![Pre Part 1](../output/prepart_1.png)
+![Pre Part 1](/output/prepart_1.png)
 
 ## Bottom-Up BFS (Part B)
-![Bottom Up BFS Part B](../output/Bottom%20Up%20BFS_part%20B.png)
+![Bottom Up BFS Part B](/output/Bottom%20Up%20BFS_part%20B.png)
 
 ## Hybrid BFS Correctness (Part C)
-![Hybrid Search Correctness](../output/Partc_HybridSearchCorrectness.png)
+![Hybrid Search Correctness](/output/Partc_HybridSearchCorrectness.png)
 
 ## Final Output Table
-![Final Output](../output/Final_output.png)
+![Final Output](/output/Final_output.png)
 
 ---
 
